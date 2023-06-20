@@ -1,0 +1,128 @@
+==> Resolucao do exame de Recurso
+
+Nome: Pedro Marcelo Bogas Oliveira - a95076
+
+==== Exercício 1 ====
+
+== 1.1 ==
+Foram feitas duas alterações ao dataset:
+
+1) Os registos não possuem um campo "id",
+mas possuem um campo chamado "nif", que funciona como um id,
+pois cada pessoa, logo cada registo, possui um diferente de todos os outros.
+Logo, o campo "nif" foi substituido por "_id"
+
+2) Esta era a estrura inicial do dataset:
+
+{
+  "intervencoes": [
+    {
+      "nome": "Ella Solva",
+      "nif": 709755185,
+      "idade": 20,
+      "sexo": "Feminino",
+      "data": "2015-09-08",
+      "nr_operacoes": 6,
+      "operacoes": [
+        {
+          "codigo": "I012",
+          "nome": "Depilação a cera",
+          "descricao": "Remoção de pelos utilizando cera quente ou fria."
+        }
+      ]
+    },
+  ...
+  ]
+}
+    
+E foi altera para esta:
+[
+    {
+      "nome": "Ella Solva",
+      "nif": 709755185,
+      "idade": 20,
+      "sexo": "Feminino",
+      "data": "2015-09-08",
+      "nr_operacoes": 6,
+      "operacoes": [
+        {
+          "codigo": "I012",
+          "nome": "Depilação a cera",
+          "descricao": "Remoção de pelos utilizando cera quente ou fria."
+        }
+      ]
+    },
+  ...
+]
+
+De seguida, o dataset deve ser importado para o MongoDB com o seguinte comando:
+mongoimport -d estetica -c consultas --file estetica.json --jsonArray
+Tendo o cuidado de ver so o import foi bem sucedido:
+5000 document(s) imported successfully. 0 document(s) failed to import.
+
+== 1.2 ==
+Antes de realizar as queries deve-se entrar na base de dados com o comando:
+use estetica
+
+1. Quantas consultas estão registadas?
+    db.consultas.count()
+    5000
+
+2. Quantos clientes com mais de 80 anos foram tratados na clínica?
+    db.consultas.find({idade: {$gt: 80}}).count()
+    1126
+
+3. Qual a distribuição das consultas por sexo?
+    db.consultas.aggregate([{$group: {_id: "$sexo", total: {$sum: 1}}}])
+    [
+        { _id: 'Feminino', total: 1652 },
+        { _id: 'Outro', total: 1706 },
+        { _id: 'Masculino', total: 1642 }
+    ]
+
+4. Qual a distribuição por tipo de intervenção? (por exemplo: quantas massagens relaxantes, quantas depilações a cera, ...)
+    db.consultas.aggregate([{$unwind: "$operacoes"}, {$group: {_id: "$operacoes.nome", total: {$sum: 1}}}])
+    [
+        { _id: 'Maquilhagem profissional', total: 1218 },
+        { _id: 'Tratamento facial com máscara', total: 1230 },
+        { _id: 'Peeling químico', total: 1245 },
+        { _id: 'Tratamento de rugas', total: 1227 },
+        { _id: 'Preenchimento facial', total: 1226 },
+        { _id: 'Microdermoabrasão', total: 1195 },
+        { _id: 'Tratamento de estrias', total: 1202 },
+        { _id: 'Massagem relaxante', total: 1250 },
+        { _id: 'Tratamento de gordura localizada', total: 1228 },
+        { _id: 'Tratamento de manchas na pele', total: 1271 },
+        { _id: 'Depilação a laser', total: 1224 },
+        { _id: 'Depilação a cera', total: 1303 },
+        { _id: 'Toxina botulínica (Botox)', total: 1229 },
+        { _id: 'Lifting facial', total: 1196 },
+        { _id: 'Tratamento de acne', total: 1276 },
+        { _id: 'Limpeza de pele', total: 1308 },
+        { _id: 'Manicure e pedicure', total: 1245 },
+        { _id: 'Tratamento de celulite', total: 1216 }
+    ]
+
+5. Qual a distribuição do número de consultas por ano?
+    db.consultas.aggregate([{$group: {_id: {$year: {$toDate: "$data"}}, total: {$sum: 1}}}])
+    [
+        { _id: 2022, total: 578 },
+        { _id: 2020, total: 590 },
+        { _id: 2018, total: 562 },
+        { _id: 2023, total: 292 },
+        { _id: 2015, total: 563 },
+        { _id: 2021, total: 621 },
+        { _id: 2019, total: 590 },
+        { _id: 2017, total: 626 },
+        { _id: 2016, total: 578 }
+    ]
+
+== 1.3 ==
+Entrar na pasta "ex1"
+Instalar dependencias utilizando o comando "npm install"
+Executar o script utilizando o comando "npm start"
+
+==== Exercício 2 ====
+Entrar na pasta "ex2"
+Instalar dependencias utilizando o comando npm install
+Executar o script utilizando o comando npm start

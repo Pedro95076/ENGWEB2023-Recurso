@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  .w3.card-4
+    header.w3-container.w3-teal
+      h1 Página do Registro de Consulta
+      h2 #{consulta._id}
+    .w3-container
+      p Nome: #{consulta.nome}
+      p NIF: #{consulta._id}
+      p Idade: #{consulta.idade}
+      p Sexo: #{consulta.sexo}
+      p Data: #{consulta.data}
+      p Número de Operações: #{consulta.nr_operacoes}
+      h3 Lista de Operações Realizadas
+      table
+        tr
+          th Código da Intervenção
+          th Nome da Intervenção
+          th Descrição da Intervenção
+        each operacao in consulta.operacoes
+          tr
+            td
+              a(href="/intervencao/#{operacao.codigo}")= operacao.codigo
+            td= operacao.nome
+            td= operacao.descricao
+

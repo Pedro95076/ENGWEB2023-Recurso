@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  .w3.card-4
+    header.w3-container.w3-teal
+      h1 Página da Intervenção
+      h2 #{intervencao.codigo}
+    .w3-container
+      p Nome: #{intervencao.nome}
+      p Descrição: #{intervencao.descricao}
+      h3 Registros de Consulta com esta Intervenção
+      table
+        tr
+          th ID
+          th Data
+          th Nome
+          th Idade
+          th Sexo
+          th Número de Intervenções
+        each registro in registros
+          tr
+            td
+              a(href='/' + consulta._id)=  consulta._id
+            td= registro.data
+            td= registro.nome
+            td= registro.idade
+            td= registro.sexo
+            td= registro.numIntervencoes
+      button
+        a(href="/") Início

@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    title Lista de Consultas
+  body
+    h1 Lista de Consultas
+      meta(name="description", content="Informação sobre as consultas")
+    table
+      tr
+        th ID
+        th Data
+        th Nome
+        th Idade
+        th Sexo
+      each consulta in consultas
+        tr
+          td
+            a(href='/' + consulta._id)=  consulta._id
+          td= consulta.data
+          td= consulta.nome
+          td= consulta.idade
+          td= consulta.sexo
+
